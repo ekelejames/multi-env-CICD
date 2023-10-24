@@ -1,0 +1,89 @@
+---
+name: install and start jenkins
+hosts: jenkinsServer
+remote_user: ec2-user
+become: yes
+
+tasks:
+  - name: update repository
+    yum:
+      name: '*'
+      state: latest 
+
+  - name: add jenkins repo
+    get_url:
+      url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+      dest: /etc/yum.repos.d/jenkins.repo
+
+  - name: import a key file from jenkins-ci
+    ansible.builtin.rpm_key:
+      state: present
+      key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+  - name: update package
+    yum:
+      name: '*'
+      state: latest
+
+  - name: install java
+    shell: amazon-linux-extras install java-openjdk11 -y
+
+  - name: install jenkins
+    yum:
+      name: jenkins
+      state: latest
+  
+  - name: start jenkins
+    ansible.builtin.systemd:
+      enabled: yes
+      name: jenkins
+      state: started
+---
+
+- name: Install Tomcat on EC2 Red Hat instance
+  hosts: your_ec2_instance
+  become: true
+
+  tasks:
+    - name: Update package manager
+      yum:
+        name: '*'
+        state: latest
+      become: true
+
+    - name: Install Java Development Kit (JDK)
+      yum:
+        name: java-1.8.0-openjdk-devel
+        state: present
+      become: true
+
+    - name: Download Apache Tomcat
+      get_url:
+        url: https://downloads.apache.org/tomcat/tomcat-9/v9.0.52/bin/apache-tomcat-9.0.52.tar.gz
+        dest: /tmp/apache-tomcat-9.0.52.tar.gz
+
+    - name: Extract Tomcat
+      unarchive:
+        src: /tmp/apache-tomcat-9.0.52.tar.gz
+        dest: /usr/local/
+        remote_src: true
+
+    - name: Set environment variables
+      lineinfile:
+        dest: /etc/profile.d/tomcat.sh
+        line: "{{ item }}"
+        create: yes
+      with_items:
+        - 'export CATALINA_HOME=/usr/local/apache-tomcat-9.0.52'
+        - 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk'
+
+    - name: Make script executable
+      file:
+        path: /etc/profile.d/tomcat.sh
+        mode: '0755'
+
+    - name: Load environment variables
+      shell: source /etc/profile.d/tomcat.sh
+
+    - name: Start Tomcat
+      command: /usr/local/apache-tomcat-9.0.52/bin/startup.sh

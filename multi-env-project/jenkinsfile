@@ -1,0 +1,48 @@
+pipeline{
+    agent any
+    tools{
+        maven 'maven'
+    }
+    stages{
+        stage('Git clone'){
+            steps{
+                sh 'echo cloning gitHub repo'
+                git url: 'https://github.com/ekelejames/my-CICD-dev-test-stage-prod.git'
+            }
+        }
+        stage('Maven build'){
+            steps{
+                sh 'echo building source code into artifact'
+                sh 'mvn clean package'
+            }
+
+        }
+        stage('Deploy to dev'){
+            steps{
+                sh 'echo deploying into tomcat'
+                deploy adapters: [tomcat9(credentialsId:'INSERT-tomcat-credential', path: '', url:'INSERT-tomacat ip address'), contextPath: null, war: 'target/*.war']
+            }
+        }
+        stage('Deploy to staging environment'){
+            steps{
+                script{
+                    kubernetesDeploy (configs: '', kubeconfigId: 'INSERT-your-staging-environment-kubeconfigId')
+                }
+            }
+        }
+        stage('Await manual approval'){
+            steps{
+                timeout(time: 2, unit: 'DAYS'){
+                    input message: 'Approval needed to deploy to Production Environment'
+                }
+            }
+        }
+        stage('Deploy to production environment'){
+            steps{
+                script{
+                    kubernetesDeploy (configs: '', kubeconfigId: 'INSERT-your-staging-environment-kubeconfigId')
+                }
+            }
+        }
+    }
+}

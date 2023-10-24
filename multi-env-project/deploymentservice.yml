@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: james-webapp-deployment
+spec:
+  selector:
+    matchLabels:
+      app: james-webapp
+  template:
+    metadata:
+      labels:
+        app: james-webapp
+    spec:
+      containers:
+      - name: james-webapp-container
+        image: ekelejay/james-webapp
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: james-webapp-service
+spec:
+  selector:
+    app: james-webapp
+  ports:
+  - protocal: "TCP"
+    port: 8080
+    targetPort: 8080
+  type: NodePort

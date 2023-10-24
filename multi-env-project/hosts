@@ -1,0 +1,5 @@
+[jenkinsServer]
+INSERT-jenkins-IP-address
+
+[tomcatServer]
+INSERT-tomcat-IP-address
