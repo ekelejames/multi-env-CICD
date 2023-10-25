@@ -28,22 +28,33 @@ To execute the project, follow these steps:
 1. Create a keypair named "project-keypair" in the AWS cloud environment using the management console and download it to your desktop.
 2. Clone the GitHub repository using the following URL:  https://github.com/ekelejames/multi-env-CICD.git
 3. Run the following Terraform commands:
+
    a. `terraform init`
+
    b. `terraform apply --auto-approve`
-4. Note down the IP addresses displayed at the end of the Terraform resource creation.
-5. Edit the "hosts" file using the recorded IP addresses.
-6. Configure Ansible by adding the keypair file's path in the "private_key_file" section of the Ansible configuration file.
-7. Run the Ansible playbook using the command: `ansible-playbook -i hosts ansible-playbook.yml`
-8. Access your Jenkins server and perform the following tasks:
+
+5. Note down the IP addresses displayed at the end of the Terraform resource creation.
+6. Edit the "hosts" file using the recorded IP addresses.
+7. Configure Ansible by adding the keypair file's path in the "private_key_file" section of the Ansible configuration file.
+8. Run the Ansible playbook using the command: `ansible-playbook -i hosts ansible-playbook.yml`
+9. Access your Jenkins server and perform the following tasks:
+   
    a. Set Maven as a tool.
+   
    b. Install the "Deploy to Container" plugin and the "Kubernetes Deploy" plugin.
+   
    c. Create credentials for accessing your Tomcat server.
+   
    d. Create a pipeline job.
-9. Copy and paste the contents of "Jenkinsfile" into the pipeline script section, editing as required:
+   
+10. Copy and paste the contents of "Jenkinsfile" into the pipeline script section, editing as required:
+    
    a. Provide your Jenkins credential IDs and Tomcat server URL.
+   
    b. Use the "generate pipeline syntax" option to create syntax for deploying into the Kubernetes cluster, ensuring to include the contents of your kube config files.
-10. Run the Jenkins job.
-11. Access your staging and production Kubernetes clusters to obtain the deployment service IP addresses and ports for exposing the application.
+
+11. Run the Jenkins job.
+12. Access your staging and production Kubernetes clusters to obtain the deployment service IP addresses and ports for exposing the application.
 
 ## Concluding Thoughts
 
