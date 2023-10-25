@@ -49,9 +49,9 @@ To execute the project, follow these steps:
    
 10. Copy and paste the contents of "Jenkinsfile" into the pipeline script section, editing as required:
     
-   a. Provide your Jenkins credential IDs and Tomcat server URL.
+       a. Provide your Jenkins credential IDs and Tomcat server URL.
    
-   b. Use the "generate pipeline syntax" option to create syntax for deploying into the Kubernetes cluster, ensuring to include the contents of your kube config files.
+       b. Use the "generate pipeline syntax" option to create syntax for deploying into the Kubernetes cluster, ensuring to include the contents of your kube config files.
 
 11. Run the Jenkins job.
 12. Access your staging and production Kubernetes clusters to obtain the deployment service IP addresses and ports for exposing the application.
