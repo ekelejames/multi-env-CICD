@@ -7,7 +7,7 @@ pipeline{
         stage('Git clone'){
             steps{
                 sh 'echo cloning gitHub repo'
-                git branch: 'main', credentialsId: 'github_cred', url: 'https://github.com/ekelejames/multi-env-CICD.git'
+                git branch: 'main', credentialsId: 'github_cred', url: 'https://github.com/ekelejames/Application-deploy-to-k8s.git'
             }
         }
         stage('Maven build'){
