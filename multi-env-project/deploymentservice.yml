@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: james-webapp-container
-        image: ekelejay/james-webapp
+        image: javatechie/devops-integration
         imagePullPolicy: IfNotPresent
         resources:
           limits:
